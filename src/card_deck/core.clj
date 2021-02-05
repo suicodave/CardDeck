@@ -1,6 +1,18 @@
-(ns card-deck.core)
+(ns card_deck.core
 
-(defn foo
-  "I don't do a whole lot."
-  [x]
-  (println x "Hello, World!"))
+  (:require [card_deck.startup :as program]))
+
+(defn -main [& args]
+
+(program/start)
+
+
+
+)
+
+
+
+
+
+
+
