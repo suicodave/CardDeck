@@ -159,11 +159,21 @@
 
 (defn printFromCSV [filename]
 
-  (def items (csvReader/read-csv filename))
+  (def fileExists(.exists (io/file filename)))
 
-  (doseq [item items]
-    (def card (str/join " " item))
-    (println   (toLongName card))  
+  (when (true? fileExists)
+    (def items (csvReader/read-csv filename))
+
+    (doseq [item items]
+      (def card (str/join " " item))
+      (println   (toLongName card))  
+    )
   )
+
+  (when-not (true? fileExists)
+    (println "No saved data from the previous session.")
+  )
+
+  
   
 )
