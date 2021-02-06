@@ -4,7 +4,7 @@
 
 Requires Leiningen installed to run.
 
-type `lein run`
+type `lein run` at the root folder of this project.
 
 # Note
 
