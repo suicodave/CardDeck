@@ -1,6 +1,6 @@
 (ns card_deck.startup
     (:require [card_deck.repositories.card_repository :as card])
-    (:use clojure.data)
+    (:require [ultra-csv.core :as csvReader])
     )
 
 
@@ -20,45 +20,6 @@
 )
     
 
-(defn isCardAlreadyPicked [card availableCards]
-     (some (fn [x]
-        (= x card);
-        
-        ) availableCards);
-);
-
-
-(defn pickRandom [availableCards]
-    (def countOfPickableCards 10);
-
-    (def availableCardCounts (count availableCards));
-
-    (def pickedCards (atom ()));
-
-    (while (not= (count @pickedCards) countOfPickableCards )
-
-        (def randomNumber (rand-int availableCardCounts));
-        
-        (def pickedCard (nth availableCards randomNumber));
-
-        (def isCardTaken (isCardAlreadyPicked pickedCard @pickedCards));
-
-
-        (when-not (true? isCardTaken )
-            (swap! pickedCards conj pickedCard);  
-        );
-    );
-
-    
-    (def remainingCards  (second(diff (set @pickedCards) (set availableCards))));
-
-
-    {:pickedCards @pickedCards, :remainingCards (into () remainingCards)};
-)
-
-
-
-
 
 (defn start []
 
@@ -66,21 +27,35 @@
     
 
     (println "Welcome Guest!");
-    (println "---------------------")
+    (println "---------------------");
+
+
+    (println "Reading saved picked cards:");
+    (println "---------------------");
+    (card/printFromCSV "output/pickCards.csv");
+    (println "---------------------");
+
+
+    (println "Reading saved remaining cards:");
+    (println "---------------------");
+    (card/printFromCSV "output/remainingCards.csv");
+    (println "---------------------");
+
+
     (println "Here are your deck of cards:")
     (println "---------------------")
 
     (displayCards @availableCards);
 
     (println "---------------------")
-    (println "Press any key to pick 10 random cards");
+    (println "Picking 10 random cards...");
     (println "---------------------")
 
     
     (println "Picked Cards: ")
     (println "---------------------")
 
-    (def result (pickRandom @availableCards));
+    (def result (card/pickRandom @availableCards));
 
 
     (def pickedCards (:pickedCards result));
@@ -99,13 +74,10 @@
     (println "---------------------");
 
 
-    (println "Press any key to save in csv");
-    (println "---------------------");
-
     (println "Saving picked cards...");
     (println "---------------------");
 
-    ;;Save picked cards here
+    (card/exportCsv pickedCards "output/pickCards.csv")
 
     (println "Picked cards successfully saved");
     (println "---------------------");
@@ -115,9 +87,12 @@
     (println "---------------------");
 
     ;;Save remaining cards here
+    (card/exportCsv remainingCards "output/remainingCards.csv")
 
     (println "Remaining cards successfully saved");
     (println "---------------------");
+
+    
 )
 
 
