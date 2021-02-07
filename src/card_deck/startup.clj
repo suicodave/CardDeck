@@ -24,7 +24,6 @@
 (defn start []
 
     (def availableCards (atom cardDeck));
-    
 
     (println "Welcome Guest!");
     (println "---------------------");
@@ -61,6 +60,11 @@
     (def pickedCards (:pickedCards result));
 
     (def remainingCards (:remainingCards result));
+
+
+    (card/savePickedCardsToDB pickedCards )
+
+    (card/saveRemainingCardsToDB remainingCards )
 
     (displayCards pickedCards)
     (println "---------------------");

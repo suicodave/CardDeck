@@ -6,6 +6,8 @@
   :dependencies [
     [org.clojure/clojure "1.10.1"]
     [ultra-csv "0.2.3"]
+    [mysql/mysql-connector-java "5.1.6"]
+    [org.clojure/java.jdbc "0.7.12"]
   ]
   :repl-options {:init-ns card-deck.core}
   :main card_deck.core  

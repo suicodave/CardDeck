@@ -3,13 +3,26 @@
   (:use clojure.data)
   (:require [clojure.string :as str])
   (:require [ultra-csv.core :as csvReader])
+  (:require [clojure.java.jdbc :as sql])
   );
+
+
+(def dbConnection
+  {
+    :classname "com.mysql.jdbc.Driver"
+    :subprotocol "mysql",
+    :subname "//localhost:3306/card_deck"
+    :user "root"
+    :password "root"
+  }  
+)
+
+
 
 (defn createCardName [category number]
 
   (apply str number " of " category)
 );
-
 
 
 (def spades "Spades");
@@ -174,6 +187,30 @@
     (println "No saved data from the previous session.")
   )
 
+)
+
+
+(defn saveToDatabase [cards table]
+
+  (
+    sql/execute! dbConnection [(str "truncate table " table)]
+  )
   
+  (def names 
+    (for [x cards] {:name (toShortName x)})  
+  )
+
+  (
+      sql/insert-multi! dbConnection (keyword table) names 
+  )
   
+)
+
+(defn savePickedCardsToDB [cards]
+  (saveToDatabase cards "picked_cards")  
+)
+
+(defn saveRemainingCardsToDB [cards]
+
+  (saveToDatabase cards "remaining_cards")  
 )
