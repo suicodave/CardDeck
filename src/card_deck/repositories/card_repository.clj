@@ -21,7 +21,17 @@
 
 (defn createCardName [category number]
 
-  (apply str number " of " category)
+  (def cardNumericValue 
+    (case number
+      11 "Jack"  
+      12 "Queen"
+      13 "King"
+      number
+    )  
+    
+  )
+
+  (apply str cardNumericValue " of " category)
 );
 
 
